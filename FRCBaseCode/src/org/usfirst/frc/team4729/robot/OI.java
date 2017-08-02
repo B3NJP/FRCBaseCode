@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 import org.usfirst.frc.team4729.robot.commands.OneStickArcade;
 import org.usfirst.frc.team4729.robot.commands.OneStickTank;
+import org.usfirst.frc.team4729.robot.commands.ResetEncoders;
 import org.usfirst.frc.team4729.robot.commands.TwoStickArcade;
 import org.usfirst.frc.team4729.robot.commands.TwoStickTank;
 
@@ -61,7 +62,7 @@ public class OI {
     Button r3            = new JoystickButton(xbox,       10);
     
     public OI() {
-    	//button1.whileHeld  ();
+    	button1.whileHeld  (new ResetEncoders ());
     	button2.whenPressed (new OneStickTank(leftStick));
     	button3.whenPressed (new TwoStickTank(leftStick, rightStick));
     	button4.whenPressed (new OneStickArcade(leftStick));

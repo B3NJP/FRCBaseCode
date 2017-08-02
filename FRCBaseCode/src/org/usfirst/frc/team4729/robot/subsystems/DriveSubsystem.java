@@ -1,7 +1,9 @@
 package org.usfirst.frc.team4729.robot.subsystems;
 
 import org.usfirst.frc.team4729.robot.Robot;
+import org.usfirst.frc.team4729.robot.RobotMap;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -10,7 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  *
  */
 public class DriveSubsystem extends Subsystem {
-	RobotDrive driveTrain = new RobotDrive(0, 1);
+	RobotDrive driveTrain;
+	Encoder leftEncoder;
 	
 	double leftSpeed = 0;
 	double rightSpeed = 0;
@@ -19,13 +22,21 @@ public class DriveSubsystem extends Subsystem {
 	
 	double acceleration = 0.05;
 	double speed = 1;
+	
+	public DriveSubsystem () {
+		driveTrain = new RobotDrive(0, 1);
+		leftEncoder = new Encoder (RobotMap.leftEncoderA, RobotMap.leftEncoderB);
+		leftEncoder.reset ();
+	}
+	
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        //setDefaultCommand(new MySpecialCommand());
+        // setDefaultCommand(new MySpecialCommand());
     }
+    
     public void arcade(double desiredMove, double desiredTurn) {
     	if ((desiredMove < 0.1) && (desiredMove > -0.1)){
     		desiredMove = 0;
@@ -56,22 +67,22 @@ public class DriveSubsystem extends Subsystem {
     	driveTrain.arcadeDrive(-forwardSpeed*speed, -turnSpeed*speed);
     }
     
-    
-    
     public void tank (double desiredLeft, double desiredRight) {
-    	if ((desiredLeft < 0.1) && (desiredLeft > -0.1)){
+    	if ((desiredLeft < 0.1) && (desiredLeft > -0.1)) {
     		desiredLeft = 0;
     		leftSpeed = 0;
     	}
-    	if ((desiredRight < 0.1) && (desiredRight > -0.1)){
+    	
+    	if ((desiredRight < 0.1) && (desiredRight > -0.1)) {
     		desiredRight = 0;
     		rightSpeed = 0;
     	}
     	
-    	if  (((desiredLeft > 0) && (leftSpeed < 0)) || ((desiredLeft < 0) && (leftSpeed > 0))){
+    	if (((desiredLeft > 0) && (leftSpeed < 0)) || ((desiredLeft < 0) && (leftSpeed > 0))) {
     		leftSpeed = 0;
     	}
-    	if (((desiredRight > 0) && (rightSpeed < 0)) || ((desiredRight < 0) && (rightSpeed > 0))){
+    	
+    	if (((desiredRight > 0) && (rightSpeed < 0)) || ((desiredRight < 0) && (rightSpeed > 0))) {
     		rightSpeed = 0;
     	}
     	
@@ -82,9 +93,21 @@ public class DriveSubsystem extends Subsystem {
     	if (Math.abs(desiredRight) < Math.abs(rightSpeed)) {
     		rightSpeed = desiredRight;
     	}
+    	
     	rightSpeed += (desiredRight-rightSpeed)*acceleration;
     	leftSpeed += (desiredLeft-leftSpeed)*acceleration;
 	}
     
+    public void resetEncoders () {
+    	leftEncoder.reset ();
+    }
+    
+    public double getDistance () {
+    	return leftEncoder.getDistance ();
+    }
+    
+    public double getRate () {
+    	return leftEncoder.getRate ();
+    }
 }
 
