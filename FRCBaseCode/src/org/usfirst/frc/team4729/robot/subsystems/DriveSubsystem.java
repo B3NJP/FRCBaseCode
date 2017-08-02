@@ -5,6 +5,7 @@ import org.usfirst.frc.team4729.robot.RobotMap;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class DriveSubsystem extends Subsystem {
 	RobotDrive driveTrain;
 	Encoder leftEncoder;
+	Talon testMotor;
 	
 	double leftSpeed = 0;
 	double rightSpeed = 0;
@@ -27,6 +29,7 @@ public class DriveSubsystem extends Subsystem {
 		driveTrain = new RobotDrive(0, 1);
 		leftEncoder = new Encoder (RobotMap.leftEncoderA, RobotMap.leftEncoderB);
 		leftEncoder.reset ();
+		testMotor = new Talon (RobotMap.testMotor);
 	}
 	
     // Put methods for controlling this subsystem
@@ -64,7 +67,8 @@ public class DriveSubsystem extends Subsystem {
     	
     	turnSpeed += (desiredTurn-turnSpeed)*acceleration;
     	forwardSpeed += (desiredMove-forwardSpeed)*acceleration;
-    	driveTrain.arcadeDrive(-forwardSpeed*speed, -turnSpeed*speed);
+    	testMotor.set (forwardSpeed);
+    	// driveTrain.arcadeDrive(-forwardSpeed*speed, -turnSpeed*speed);
     }
     
     public void tank (double desiredLeft, double desiredRight) {
